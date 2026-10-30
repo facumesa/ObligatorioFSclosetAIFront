@@ -1,4 +1,6 @@
 import { useSelector } from "react-redux";
+import { Outlet } from "react-router";
+
 
 const Contador = () => {
 
@@ -7,7 +9,9 @@ const Contador = () => {
     const contador = useSelector(state => state.contador.cuenta);
 
   return (
-    <div>{contador}</div>
+    <div>{contador}
+    <Outlet/>
+    </div>
   )
 }
 

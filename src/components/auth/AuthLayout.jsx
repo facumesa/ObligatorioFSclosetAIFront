@@ -2,7 +2,7 @@ const AuthLayout = ({children}) => {
 
     return (
     <div className="auth-page">
-        <section className="auth-side"><a class="brand" href="dashboard.html"><span
+        <section className="auth-side"><a className="brand" href="dashboard.html"><span
                     className="brand-mark">✦</span>closet<span>ai</span></a>
             <div className="auth-art">🧥</div>
             <div>

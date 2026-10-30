@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import contadorSlice from './slices/contadorSlice';
+import authReducer from './slices/authSlice';
 
 
 export const store = configureStore({
     reducer: {
-        contador : contadorSlice
+        auth : authReducer,
+        contador: contadorSlice
     }
 })
