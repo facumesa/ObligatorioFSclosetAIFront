@@ -1,4 +1,5 @@
 import "./styles.css";
+import "./i18n/i18n.js";
 import Sidebar from "./components/layout/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";

@@ -860,3 +860,30 @@ button.profile:hover {
     opacity: 0.55;
     cursor: not-allowed;
 }
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.language-selector button {
+  background: transparent;
+  border: none;
+  color: #68796e;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.language-selector button:disabled {
+  color: #243c30;
+  font-weight: 800;
+  cursor: default;
+}
+
+.language-selector span {
+  color: #a0aaa3;
+}

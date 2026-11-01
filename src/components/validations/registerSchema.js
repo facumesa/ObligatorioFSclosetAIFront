@@ -1,36 +1,41 @@
+
 import * as Yup from "yup";
 
-const registroSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, "El nombre debe tener al menos 3 caracteres")
-    .max(20, "El nombre no puede superar los 20 caracteres")
-    .required("El nombre es obligatorio"),
+const registroSchema = (t) =>
+  Yup.object().shape({
+    name: Yup.string()
+      .min(3, t("auth.validation.nameMin"))
+      .max(20, t("auth.validation.nameMax"))
+      .required(t("auth.validation.nameRequired")),
 
-  username: Yup.string()
-    .min(3, "El usuario debe tener al menos 3 caracteres")
-    .max(20, "El usuario no puede superar los 20 caracteres")
-    .required("El usuario es obligatorio"),
+    username: Yup.string()
+      .min(3, t("auth.validation.usernameMin"))
+      .max(20, t("auth.validation.usernameMax"))
+      .required(t("auth.validation.usernameRequired")),
 
-  email: Yup.string()
-    .required("El correo es obligatorio")
-    .email("Ingresá un correo electrónico válido")
-    .matches(
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      "El correo debe incluir un dominio válido, por ejemplo: usuario@gmail.com",
-    ),
+    email: Yup.string()
+      .required(t("auth.validation.emailRequired"))
+      .email(t("auth.validation.emailInvalid"))
+      .matches(
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        t("auth.validation.emailDomain")
+      ),
 
-  password: Yup.string()
-    .min(3, "La contraseña debe tener al menos 3 caracteres")
-    .max(20, "La contraseña no puede superar los 20 caracteres")
-    .matches(
-      /^[a-zA-Z0-9]+$/,
-      "La contraseña solo puede contener letras y números",
-    )
-    .required("La contraseña es obligatoria"),
+    password: Yup.string()
+      .min(3, t("auth.validation.passwordMin"))
+      .max(20, t("auth.validation.passwordMax"))
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        t("auth.validation.passwordAlphanumeric")
+      )
+      .required(t("auth.validation.passwordRequired")),
 
-  confirmPassword: Yup.string()
-    .required("Debés confirmar la contraseña")
-    .oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
-});
+    confirmPassword: Yup.string()
+      .required(t("auth.validation.confirmPasswordRequired"))
+      .oneOf(
+        [Yup.ref("password")],
+        t("auth.validation.passwordMismatch")
+      ),
+  });
 
 export default registroSchema;

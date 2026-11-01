@@ -1,19 +1,21 @@
+
 import * as Yup from "yup";
 
-const loginSchema = Yup.object().shape({
+const loginSchema = (t) =>
+  Yup.object().shape({
     username: Yup.string()
-        .min(3, "El usuario debe tener al menos 3 caracteres")
-        .max(20, "El usuario no puede superar los 20 caracteres")
-        .required("El usuario es obligatorio"),
+      .min(3, t("auth.validation.usernameMin"))
+      .max(20, t("auth.validation.usernameMax"))
+      .required(t("auth.validation.usernameRequired")),
 
     password: Yup.string()
-        .min(3, "La contraseña debe tener al menos 3 caracteres")
-        .max(20, "La contraseña no puede superar los 20 caracteres")
-        .matches(
-            /^[a-zA-Z0-9]+$/,
-            "La contraseña solo puede contener letras y números"
-        )
-        .required("La contraseña es obligatoria")
-});
+      .min(3, t("auth.validation.passwordMin"))
+      .max(20, t("auth.validation.passwordMax"))
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        t("auth.validation.passwordAlphanumeric")
+      )
+      .required(t("auth.validation.passwordRequired")),
+  });
 
 export default loginSchema;

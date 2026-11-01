@@ -1,214 +1,225 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-
+import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import LanguageSelector from "../translationComponents/LanguageSelector";
+
 import registroSchema from "../validations/registerSchema";
 
 const RegisterForm = () => {
-    const navigate = useNavigate();
-    const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
-    const {
-        control,
-        handleSubmit,
-        formState: { errors, isValid, isSubmitting }
-    } = useForm({
-        resolver: yupResolver(registroSchema),
-        mode: "onChange",
-        defaultValues: {
-            name: "",
-            username: "",
-            email: "",
-            password: "",
-            confirmPassword: ""
+  const [error, setError] = useState("");
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(registroSchema(t)),
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const registrar = async (data) => {
+    setError("");
+
+    const { confirmPassword, ...datosRegistro } = data;
+
+    try {
+      const respuesta = await fetch(
+        "https://obligatorio-f-scloset-ai.vercel.app/v1/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(datosRegistro),
+        },
+      );
+
+      const datos = await respuesta.json();
+
+      if (!respuesta.ok) {
+        let mensaje = t("auth.register.errorMessage");
+
+        if (typeof datos.message === "string" && datos.message) {
+          mensaje = datos.message;
         }
-    });
 
-    const registrar = async (data) => {
-        setError("");
-
-        try {
-            const respuesta = await fetch(
-                "https://obligatorio-f-scloset-ai.vercel.app/v1/auth/signup",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        name: data.name,
-                        username: data.username,
-                        email: data.email,
-                        password: data.password
-                    })
-                }
-            );
-
-            const datos = await respuesta.json();
-
-            if (!respuesta.ok) {
-                const mensaje = Array.isArray(datos.details)
-                    ? datos.details.map((detalle) =>
-                        typeof detalle === "string"
-                            ? detalle
-                            : detalle.message
-                    ).join(". ")
-                    : typeof datos.details === "string"
-                        ? datos.details
-                        : datos.message;
-
-                setError(mensaje || "Ocurrió un error al registrarte");
-                return;
-            }
-
-            navigate("/login");
-
-        } catch (error) {
-            console.error("Error al conectar con la API:", error);
-            setError("No pudimos conectar con el servidor. Intentá nuevamente.");
+        if (typeof datos.details === "string" && datos.details) {
+          mensaje = datos.details;
         }
-    };
 
-    return (
-        <div className="auth-form">
-            <div className="eyebrow">EMPEZÁ CON ClosetAI</div>
-            <h1>Creá tu cuenta</h1>
-            <p className="subtitle">Tu próximo look favorito empieza acá.</p>
+        setError(mensaje);
+        return;
+      }
 
-            <form onSubmit={handleSubmit(registrar)} noValidate>
-                <div className="row-fields">
-                    <div className="field">
-                        <label htmlFor="name">Nombre</label>
+      navigate("/login");
+    } catch (error) {
+      setError(t("auth.register.errorMessage"));
+    }
+  };
 
-                        <Controller
-                            control={control}
-                            name="name"
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="name"
-                                    placeholder="Tu nombre"
-                                />
-                            )}
-                        />
+  return (
+    <div className="auth-form">
+      <LanguageSelector />
 
-                        {errors.name && (
-                            <p className="field-error">{errors.name.message}</p>
-                        )}
-                    </div>
+      <div className="eyebrow">{t("auth.register.eyebrow")}</div>
 
-                    <div className="field">
-                        <label htmlFor="register-username">Usuario</label>
+      <h1>{t("auth.register.title")}</h1>
 
-                        <Controller
-                            control={control}
-                            name="username"
-                            render={({ field }) => (
-                                <input
-                                    {...field}
-                                    id="register-username"
-                                    placeholder="Tu usuario"
-                                />
-                            )}
-                        />
+      <p className="subtitle">{t("auth.register.subtitle")}</p>
 
-                        {errors.username && (
-                            <p className="field-error">{errors.username.message}</p>
-                        )}
-                    </div>
-                </div>
+      <form onSubmit={handleSubmit(registrar)} noValidate>
+        <div className="row-fields">
+          <div className="field">
+            <label htmlFor="name">{t("auth.register.name")}</label>
 
-                <div className="field">
-                    <label htmlFor="email">Correo electrónico</label>
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  id="name"
+                  placeholder={t("auth.register.namePlaceholder")}
+                  autoComplete="name"
+                />
+              )}
+            />
 
-                    <Controller
-                        control={control}
-                        name="email"
-                        render={({ field }) => (
-                            <input
-                                {...field}
-                                id="email"
-                                type="email"
-                                placeholder="nombre@ejemplo.com"
-                            />
-                        )}
-                    />
+            {errors.name && (
+              <p className="field-error">{errors.name.message}</p>
+            )}
+          </div>
 
-                    {errors.email && (
-                        <p className="field-error">{errors.email.message}</p>
-                    )}
-                </div>
+          <div className="field">
+            <label htmlFor="username">{t("auth.register.username")}</label>
 
-                <div className="field">
-                    <label htmlFor="register-password">Contraseña</label>
+            <Controller
+              name="username"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  id="username"
+                  placeholder={t("auth.register.usernamePlaceholder")}
+                  autoComplete="username"
+                />
+              )}
+            />
 
-                    <Controller
-                        control={control}
-                        name="password"
-                        render={({ field }) => (
-                            <input
-                                {...field}
-                                id="register-password"
-                                type="password"
-                                placeholder="Creá una contraseña"
-                            />
-                        )}
-                    />
-
-                    {errors.password && (
-                        <p className="field-error">{errors.password.message}</p>
-                    )}
-                </div>
-
-                <div className="field">
-                    <label htmlFor="confirm">Repetir contraseña</label>
-
-                    <Controller
-                        control={control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                            <input
-                                {...field}
-                                id="confirm"
-                                type="password"
-                                placeholder="Repetí tu contraseña"
-                            />
-                        )}
-                    />
-
-                    {errors.confirmPassword && (
-                        <p className="field-error">
-                            {errors.confirmPassword.message}
-                        </p>
-                    )}
-                </div>
-
-                <button
-                    className="submit"
-                    type="submit"
-                    disabled={!isValid || isSubmitting}
-                >
-                    {isSubmitting ? "Creando cuenta..." : "Crear cuenta →"}
-                </button>
-
-                {error && (
-                    <div className="auth-error" role="alert">
-                        <span className="auth-error-icon">!</span>
-                        <div className="auth-error-content">
-                            <strong>No pudimos crear tu cuenta</strong>
-                            <p>{error}</p>
-                        </div>
-                    </div>
-                )}
-            </form>
-
-            <p className="auth-switch">
-                ¿Ya tenés cuenta? <Link to="/login">Iniciá sesión</Link>
-            </p>
+            {errors.username && (
+              <p className="field-error">{errors.username.message}</p>
+            )}
+          </div>
         </div>
-    );
+
+        <div className="field">
+          <label htmlFor="email">{t("auth.register.email")}</label>
+
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <input
+                {...field}
+                id="email"
+                type="email"
+                placeholder={t("auth.register.emailPlaceholder")}
+                autoComplete="email"
+              />
+            )}
+          />
+
+          {errors.email && (
+            <p className="field-error">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div className="field">
+          <label htmlFor="password">{t("auth.register.password")}</label>
+
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <input
+                {...field}
+                id="password"
+                type="password"
+                placeholder={t("auth.register.passwordPlaceholder")}
+                autoComplete="new-password"
+              />
+            )}
+          />
+
+          {errors.password && (
+            <p className="field-error">{errors.password.message}</p>
+          )}
+        </div>
+
+        <div className="field">
+          <label htmlFor="confirmPassword">
+            {t("auth.register.confirmPassword")}
+          </label>
+
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
+              <input
+                {...field}
+                id="confirmPassword"
+                type="password"
+                placeholder={t("auth.register.confirmPasswordPlaceholder")}
+                autoComplete="new-password"
+              />
+            )}
+          />
+
+          {errors.confirmPassword && (
+            <p className="field-error">{errors.confirmPassword.message}</p>
+          )}
+        </div>
+
+        <button
+          className="submit"
+          type="submit"
+          disabled={!isValid || isSubmitting}
+        >
+          {isSubmitting
+            ? t("common.loading")
+            : `${t("auth.register.submit")} →`}
+        </button>
+
+        {error && (
+          <div className="auth-error" role="alert">
+            <span className="auth-error-icon">!</span>
+
+            <div className="auth-error-content">
+              <strong>{t("auth.register.errorTitle")}</strong>
+              <p>{error}</p>
+            </div>
+          </div>
+        )}
+      </form>
+
+      <p className="auth-switch">
+        {t("auth.register.hasAccount")}{" "}
+        <Link to="/login">{t("auth.register.loginLink")}</Link>
+      </p>
+    </div>
+  );
 };
 
 export default RegisterForm;
