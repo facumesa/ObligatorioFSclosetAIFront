@@ -848,3 +848,15 @@ button.profile:hover {
 .profile-logout:hover {
     background: #faf3ee;
 }
+
+.field-error {
+    margin: 6px 0 0;
+    color: #a36c59;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.submit:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
