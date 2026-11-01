@@ -887,3 +887,25 @@ button.profile:hover {
 .language-selector span {
   color: #a0aaa3;
 }
+
+.dashboard-charts {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.dashboard-charts h2 {
+  margin: 0 0 8px;
+}
+
+.dashboard-charts p {
+  color: #68796e;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  position: relative;
+  height: 280px;
+  width: 100%;
+}
