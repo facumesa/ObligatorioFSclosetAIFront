@@ -7,12 +7,18 @@ import OutfitCards from "./OutfitCards";
 import SectionHead from "./SectionHead";
 import StatCards from "./StatCards";
 import DashboardCharts from "./DashboardCharts";
+import { useDispatch, useSelector } from "react-redux";
+import { guardarPrendas } from "../../store/slices/prendasSlice";
 
 const DashboardContent = () => {
-  const [prendas, setPrendas] = useState([]);
   const [totalOutfits, setTotalOutfits] = useState(0);
+  const [outfits, setOutfits] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
+
+  const prendas = useSelector((state) => state.prendas.lista);
+  const cargado = useSelector((state) => state.prendas.cargado);
 
   const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
   const token = localStorage.getItem("token");
@@ -43,7 +49,8 @@ const DashboardContent = () => {
         const datosPrendas = await respuestaPrendas.json();
         const datosOutfits = await respuestaOutfits.json();
 
-        setPrendas(datosPrendas);
+        dispatch(guardarPrendas(datosPrendas));
+        setOutfits(datosOutfits.data);        
         setTotalOutfits(datosOutfits.total);
       } catch (error) {
         setError(error.message);
@@ -53,7 +60,7 @@ const DashboardContent = () => {
     };
 
     cargarEstadisticas();
-  }, [token]);
+  }, [cargado, dispatch, token]);
 
   return (
     <main className="content">
@@ -75,7 +82,8 @@ const DashboardContent = () => {
       <DashboardCharts prendas={prendas} />
 
       <SectionHead />
-      <OutfitCards />
+
+      <OutfitCards outfits={outfits}/>
     </main>
   );
 };

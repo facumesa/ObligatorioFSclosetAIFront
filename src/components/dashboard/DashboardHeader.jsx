@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { cerrarSesion } from "../../store/slices/authSlice";
+import { limpiarCategorias } from "../../store/slices/categoriasSlice";
+import { limpiarPrendas } from "../../store/slices/prendasSlice";
+
 
 const DashboardHeader = () => {
 
@@ -16,6 +19,8 @@ const DashboardHeader = () => {
         localStorage.removeItem("token");
 
         dispatch(cerrarSesion());
+        dispatch(limpiarPrendas());
+        dispatch(limpiarCategorias());
         navigate("/login", { replace: true });
     };
 

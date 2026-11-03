@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LanguageSelector from "../translationComponents/LanguageSelector";
-
 import { iniciarSesion } from "../../store/slices/authSlice";
 import loginSchema from "../validations/loginSchema";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -15,6 +15,8 @@ const LoginForm = () => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     control,
@@ -101,7 +103,7 @@ const LoginForm = () => {
 
         <div className="field">
           <label htmlFor="password">{t("auth.login.password")}</label>
-
+          <div className="passwordWrapper">
           <Controller
             name="password"
             control={control}
@@ -109,12 +111,20 @@ const LoginForm = () => {
               <input
                 {...field}
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder={t("auth.login.passwordPlaceholder")}
                 autoComplete="current-password"
               />
             )}
           />
+          <button
+            type='button'
+            className='eyeButton'
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+          </div>
 
           {errors.password && (
             <p className="field-error">{errors.password.message}</p>

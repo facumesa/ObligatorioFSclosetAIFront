@@ -1,44 +1,33 @@
 import OutfitCard from "./OutfitCard";
 
-const OutfitCards = () => {
-    
-    const cards = [
-    {
-        id: 0,
-        nombre: "Casual de todos los días",
-        temporada: "Primavera",
-        prendas: 4,
-        emoji: "👕👖",
-        categoria: "Casual",
-        estilo: "one"
-    },
-    {
-        id: 1,
-        nombre: "Elegante para salir",
-        temporada: "Cualquiera",
-        prendas: 3,
-        emoji: "👔👞",
-        categoria: "Formal",
-        estilo: "two"
+const OutfitCards = ({ outfits }) => {
 
-    },
-    {
-        id: 2,
-        nombre: "Fin de semana",
-        temporada: "Otoño",
-        prendas: 5,
-        emoji: "🧥👟",
-        categoria: "Urbano",
-        estilo: "three"
+    const estilos = ["one", "two", "three"];
+
+    if (outfits.length === 0) {
+        return (
+            <div className="empty-outfits">
+                <h3>¡Todavía no tenés outfits creados!</h3>
+                <p>Empezá a combinar tus prendas y creá tu primer look.</p>
+            </div>
+        );
     }
-];
     
     return (
-        <div className="cards"> 
-            {cards.map(c => <OutfitCard key={c.id} {...c}/>)}
+        <div className="cards">
+            {outfits.slice(0, 3).map((outfit, index) => (
+                <OutfitCard
+                    key={outfit._id}
+                    nombre={outfit.nombre}
+                    temporada={outfit.temporada}
+                    prendas={outfit.prendas}
+                    emoji="👕👖"
+                    categoria={outfit.categoriaId?.nombre}
+                    estilo={estilos[index]}
+                />
+            ))}
         </div>
-        )
-        
-}
+    );
+};
 
 export default OutfitCards;

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LanguageSelector from "../translationComponents/LanguageSelector";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import registroSchema from "../validations/registerSchema";
 
 const RegisterForm = () => {
@@ -12,6 +12,9 @@ const RegisterForm = () => {
   const { t } = useTranslation();
 
   const [error, setError] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const {
     control,
@@ -148,20 +151,29 @@ const RegisterForm = () => {
 
         <div className="field">
           <label htmlFor="password">{t("auth.register.password")}</label>
+          <div className="passwordWrapper">
 
-          <Controller
-            name="password"
-            control={control}
-            render={({ field }) => (
-              <input
-                {...field}
-                id="password"
-                type="password"
-                placeholder={t("auth.register.passwordPlaceholder")}
-                autoComplete="new-password"
-              />
-            )}
-          />
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder={t("auth.register.passwordPlaceholder")}
+                  autoComplete="new-password"
+                />
+              )}
+            />
+            <button
+              type='button'
+              className='eyeButton'
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
 
           {errors.password && (
             <p className="field-error">{errors.password.message}</p>
@@ -173,19 +185,30 @@ const RegisterForm = () => {
             {t("auth.register.confirmPassword")}
           </label>
 
-          <Controller
-            name="confirmPassword"
-            control={control}
-            render={({ field }) => (
-              <input
-                {...field}
-                id="confirmPassword"
-                type="password"
-                placeholder={t("auth.register.confirmPasswordPlaceholder")}
-                autoComplete="new-password"
-              />
-            )}
-          />
+          <div className="passwordWrapper">
+
+            <Controller
+              name="confirmPassword"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder={t("auth.register.confirmPasswordPlaceholder")}
+                  autoComplete="new-password"
+                />
+              )}
+            />
+            <button
+              type='button'
+              className='eyeButton'
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+
 
           {errors.confirmPassword && (
             <p className="field-error">{errors.confirmPassword.message}</p>

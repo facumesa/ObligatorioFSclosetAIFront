@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import DashboardContent from "../components/dashboard/DashboardContent";
+import DashboardContent from "../dashboard/DashboardContent";
 import { useEffect } from "react";
 
 const Dashboard = () => {

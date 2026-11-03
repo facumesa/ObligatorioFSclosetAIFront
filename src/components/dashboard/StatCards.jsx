@@ -24,7 +24,7 @@ const StatCards = ({
       id: 2,
       nombre: "Tu plan actual",
       informacion: plan ? `${plan} ✦` : "—",
-      nota: "Descubrí Premium",
+      nota: plan = "Premium" ? "Explorá Premium" : "Descubrí Premium",
     },
   ];
 

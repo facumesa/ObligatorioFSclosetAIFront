@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import contadorSlice from './slices/contadorSlice';
 import authReducer from './slices/authSlice';
+import prendasReducer from './slices/prendasSlice'
+import categoriasReducer from "./slices/categoriasSlice";
+
 
 
 export const store = configureStore({
     reducer: {
         auth : authReducer,
-        contador: contadorSlice
+        prendas: prendasReducer,
+        categorias: categoriasReducer
     }
 })
