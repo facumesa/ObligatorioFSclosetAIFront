@@ -3,10 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
-import crearOutfitSchema from "./validations/outfitSchema";
+import crearOutfitSchema from "../validations/outfitSchema";
 import { useDispatch, useSelector } from "react-redux";
-import { guardarPrendas } from "../store/slices/prendasSlice";
-import { guardarCategorias } from "../store/slices/categoriasSlice";
+import { guardarPrendas } from "../../store/slices/prendasSlice";
+import { guardarCategorias } from "../../store/slices/categoriasSlice";
+import toast from 'react-hot-toast';
 
 
 
@@ -14,8 +15,6 @@ const CrearOutfit = () => {
     const navigate = useNavigate();
 
     const [error, setError] = useState("");
-
-    const [cargandoPrendas, setCargandoPrendas] = useState(true);
 
     const token = localStorage.getItem("token");
 
@@ -62,7 +61,7 @@ const CrearOutfit = () => {
         const cargarPrendas = async () => {
             try {
                 const respuesta = await fetch(
-                    "https://obligatorio-f-scloset-ai.vercel.app/v1/prendas",
+                    `${import.meta.env.VITE_API_BASE_URL}/v1/prendas`,
                     {
                         headers: {
                             Authorization: token
@@ -95,7 +94,7 @@ const CrearOutfit = () => {
         const cargarCategorias = async () => {
             try {
                 const respuesta = await fetch(
-                    "https://obligatorio-f-scloset-ai.vercel.app/v1/categorias",
+                    `${import.meta.env.VITE_API_BASE_URL}/v1/categorias`,
                     {
                         headers: {
                             Authorization: token
@@ -123,14 +122,12 @@ const CrearOutfit = () => {
 
     const prendasSeleccionadas = watch("prendas");
 
-    const categoriaSeleccionada = watch("categoriaId")
-
     const crearOutfit = async (data) => {
         setError("");
 
         try {
             const respuesta = await fetch(
-                "https://obligatorio-f-scloset-ai.vercel.app/v1/outfits",
+                `${import.meta.env.VITE_API_BASE_URL}/v1/outfits`,
                 {
                     method: "POST",
                     headers: {
@@ -141,17 +138,18 @@ const CrearOutfit = () => {
                 }
             );
 
-            const datos = await respuesta.json();
+            const datos = await respuesta.json();       
 
             if (!respuesta.ok) {
                 setError(datos.message || "No se pudo crear el outfit");
                 return;
             }
 
-            alert("¡Outfit creado correctamente!");
+            toast.success("Outfit creado exitosamente");
             navigate("/dashboard");
 
         } catch (error) {
+            toast.error("No se pudo crear el outfit");
             setError("Ocurrió un error al crear el outfit");
         }
     };

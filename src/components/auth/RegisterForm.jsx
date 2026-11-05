@@ -39,7 +39,7 @@ const RegisterForm = () => {
 
     try {
       const respuesta = await fetch(
-        "https://obligatorio-f-scloset-ai.vercel.app/v1/auth/signup",
+        `${import.meta.env.VITE_API_BASE_URL}/v1/auth/signup`,
         {
           method: "POST",
           headers: {

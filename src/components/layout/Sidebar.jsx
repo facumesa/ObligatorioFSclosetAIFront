@@ -12,7 +12,7 @@ const Sidebar = () => {
         <div className="nav-label">MI ESPACIO</div>
 
         <nav className="nav">
-          <NavLink to="">
+          <NavLink to="/dashboard">
             <span className="symbol">⌂</span> Inicio
           </NavLink>
 

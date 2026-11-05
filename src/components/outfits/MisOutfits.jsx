@@ -1,13 +1,32 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import EditarOutfitModal from "./modals/EditarOutfitModal";
+import EliminarOutfitModal from "./modals/EliminarOutfitModal";
+import VerOutfitModal from "./modals/VerOutfitModal";
+import { guardarCategorias } from "../../store/slices/categoriasSlice";
+import { guardarPrendas } from "../../store/slices/prendasSlice";
+import { mostrarSpinner, ocultarSpinner } from "../../store/slices/spinnerSlice";
+import Spinner from "../spinner/Spinner";
+import toast from "react-hot-toast";
+
+
+
 
 
 const MisOutfits = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [error, setError] = useState("")
+    const [modalAbierto, setModalAbierto] = useState(false);
+    const [outfitAEditar, setOutfitAEditar] = useState(null);
+
+    const [modalEliminarAbierto, setModalEliminarAbierto] = useState(false);
+    const [outfitAEliminar, setOutfitAEliminar] = useState(null);
+
+    const [outfitAVer, setOutfitAVer] = useState(null)
+    const [modalVerAbierto, setModalVerAbierto] = useState(false)
 
     const [outfits, setOutfits] = useState([])
     const [pagina, setPagina] = useState(1);
@@ -17,16 +36,110 @@ const MisOutfits = () => {
 
     const token = localStorage.getItem("token");
 
+    const abrirModalVer = (outfit) => {
+        setOutfitAVer(outfit);
+        setModalVerAbierto(true);
+    }
+
+    const cerrarModalVer = () => {
+        setModalVerAbierto(false)
+        setOutfitAVer(null)
+    }
+
+    const abrirModalEliminar = (outfit) => {
+        setOutfitAEliminar(outfit);
+        setModalEliminarAbierto(true);
+    };
+
+    const cerrarModalEliminar = () => {
+        setModalEliminarAbierto(false);
+        setOutfitAEliminar(null);
+    };
+
+    const abrirModal = (outfit) => {
+        setOutfitAEditar(outfit);
+        setModalAbierto(true);
+    };
+
+    const cerrarModal = () => {
+        setOutfitAEditar(null);
+        setModalAbierto(false);
+    }
+
+    const prendasCargadas = useSelector(
+        (state) => state.prendas.cargado
+    );
+
+    const categoriasCargadas = useSelector(
+        (state) => state.categorias.cargado
+    );
+
+    useEffect(() => {
+        if (categoriasCargadas) return;
+
+        const cargarCategorias = async () => {
+            try {
+                const respuesta = await fetch(
+                    `${import.meta.env.VITE_API_BASE_URL}/v1/categorias`,
+                    {
+                        headers: {
+                            Authorization: token
+                        }
+                    }
+                );
+
+                if (!respuesta.ok) {
+                    throw new Error("No se pudieron cargar las categorías");
+                }
+
+                const datos = await respuesta.json();
+                dispatch(guardarCategorias(datos));
+
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+
+        cargarCategorias();
+    }, [categoriasCargadas, dispatch, token]);
+
+    useEffect(() => {
+        if (prendasCargadas) return;
+
+        const cargarPrendas = async () => {
+            try {
+                const respuesta = await fetch(
+                    `${import.meta.env.VITE_API_BASE_URL}/v1/prendas`,
+                    {
+                        headers: {
+                            Authorization: token
+                        }
+                    }
+                );
+
+                if (!respuesta.ok) {
+                    throw new Error("No se pudieron cargar las prendas");
+                }
+
+                const datos = await respuesta.json();
+
+                dispatch(guardarPrendas(datos));
+
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+
+        cargarPrendas();
+
+    }, [prendasCargadas, dispatch, token]);
+
     const eliminarOutfit = async (id) => {
-        const confirmar = window.confirm(
-            "¿Estás seguro de que querés eliminar este outfit?"
-        );
-
-        if (!confirmar) return;
-
         try {
+            dispatch(mostrarSpinner());
+
             const respuesta = await fetch(
-                `https://obligatorio-f-scloset-ai.vercel.app/v1/outfits/${id}`,
+                `${import.meta.env.VITE_API_BASE_URL}/v1/outfits/${id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -39,19 +152,25 @@ const MisOutfits = () => {
                 throw new Error("No se pudo eliminar el outfit");
             }
 
-            alert("Outfit eliminado correctamente");
+            setOutfits((prev) =>
+                prev.filter((outfit) => outfit._id !== id)
+            );
 
-            setOutfits(outfits.filter((outfit) => outfit._id !== id));
+            toast.success("Outfit eliminado correctamente")
+            cerrarModalEliminar();
 
         } catch (error) {
             setError(error.message);
+            toast.error("El outfit no pudo ser eliminado")
+        } finally {
+            dispatch(ocultarSpinner());
         }
     };
 
     const cambiarFavorito = async (id, favoritoActual) => {
         try {
             const respuesta = await fetch(
-                `https://obligatorio-f-scloset-ai.vercel.app/v1/outfits/${id}`,
+                `${import.meta.env.VITE_API_BASE_URL}/v1/outfits/${id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -81,16 +200,74 @@ const MisOutfits = () => {
                 })
             );
 
+            if (favoritoActual) {
+                toast.success("Outfit eliminado de favoritos");
+            } else {
+                toast.success("Outfit agregado a favoritos");
+            }
+
         } catch (error) {
             setError(error.message);
+            toast.error("El outfit no pudo ser marcado como favorito")
+        }
+    };
+
+    const editarOutfit = async (values) => {
+        dispatch(mostrarSpinner());
+        setError("");
+
+        try {
+            const respuesta = await fetch(
+                `${import.meta.env.VITE_API_BASE_URL}/v1/outfits/${outfitAEditar._id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: token
+                    },
+                    body: JSON.stringify(values)
+                }
+            );
+
+            if (!respuesta.ok) {
+                throw new Error("No se pudo editar el outfit");
+            }
+
+            cerrarModal();
+
+            const respuestaLista = await fetch(
+                `${import.meta.env.VITE_API_BASE_URL}/v1/outfits?page=${pagina}&limit=6&temporada=${temporada}&favorito=${favorito}`,
+                {
+                    headers: {
+                        Authorization: token
+                    }
+                }
+            );
+
+            if (!respuestaLista.ok) {
+                throw new Error("El outfit se guardó, pero no se pudo actualizar la lista");
+            }
+
+            const datos = await respuestaLista.json();
+
+            setOutfits(datos.data);
+            setTotalPaginas(datos.totalPages);
+            toast.success("Outfit editado correctamente")
+
+        } catch (error) {
+            setError(error.message);
+            toast.error("No fue posible editar el outfit")
+        } finally {
+            dispatch(ocultarSpinner());
         }
     };
 
     useEffect(() => {
         const cargarOutfits = async () => {
+            dispatch(mostrarSpinner());
             try {
                 const respuesta = await fetch(
-                    `https://obligatorio-f-scloset-ai.vercel.app/v1/outfits?page=${pagina}&limit=6&temporada=${temporada}&favorito=${favorito}`,
+                    `${import.meta.env.VITE_API_BASE_URL}/v1/outfits?page=${pagina}&limit=6&temporada=${temporada}&favorito=${favorito}`,
                     {
                         headers: {
                             Authorization: token
@@ -109,6 +286,8 @@ const MisOutfits = () => {
 
             } catch (error) {
                 setError(error.message)
+            } finally {
+                dispatch(ocultarSpinner());
             }
         };
 
@@ -117,6 +296,7 @@ const MisOutfits = () => {
 
     return (
         <main className="content mis-outfits">
+            <Spinner />
 
             <div className="mis-outfits-header">
                 <div>
@@ -178,7 +358,7 @@ const MisOutfits = () => {
             ) : (
                 <div className="mis-outfits-grid">
                     {outfits.map((outfit) => (
-                        <article className="mis-outfit-card" key={outfit._id}>
+                        <article className="mis-outfit-card" key={outfit._id} onClick={() => abrirModalVer(outfit)}>
                             <div className="mis-outfit-image">
                                 <span className="mis-outfit-category">
                                     {outfit.categoriaId?.nombre}
@@ -187,7 +367,7 @@ const MisOutfits = () => {
                                 <button
                                     type="button"
                                     className="mis-outfit-favorite"
-                                    onClick={() => cambiarFavorito(outfit._id, outfit.favorito)}    
+                                    onClick={(e) => { e.stopPropagation(); cambiarFavorito(outfit._id, outfit.favorito); }}
                                 >
                                     {outfit.favorito ? "♥" : "♡"}
                                 </button>
@@ -209,6 +389,7 @@ const MisOutfits = () => {
 
                             <div className="mis-outfit-info">
                                 <h3>{outfit.nombre}</h3>
+                                <p>{outfit.descripcion}</p>
 
                                 <p>
                                     {outfit.prendas.length} prendas · {outfit.temporada}
@@ -218,6 +399,7 @@ const MisOutfits = () => {
                                     <button
                                         type="button"
                                         className="btn-editar-outfit"
+                                        onClick={(e) => { e.stopPropagation(); abrirModal(outfit); }}
                                     >
                                         Editar
                                     </button>
@@ -225,7 +407,7 @@ const MisOutfits = () => {
                                     <button
                                         type="button"
                                         className="btn-eliminar-outfit"
-                                        onClick={() => eliminarOutfit(outfit._id)}
+                                        onClick={(e) => { e.stopPropagation(); abrirModalEliminar(outfit); }}
                                     >
                                         Eliminar
                                     </button>
@@ -234,6 +416,27 @@ const MisOutfits = () => {
                         </article>
                     ))}
                 </div>)}
+            <EditarOutfitModal
+                isOpen={modalAbierto}
+                onRequestClose={cerrarModal}
+                outfit={outfitAEditar}
+                onSave={editarOutfit}
+            />
+            <EliminarOutfitModal
+                isOpen={modalEliminarAbierto}
+                onRequestClose={cerrarModalEliminar}
+                outfit={outfitAEliminar}
+                onConfirm={() => {
+                    if (outfitAEliminar) {
+                        eliminarOutfit(outfitAEliminar._id);
+                    }
+                }}
+            />
+            <VerOutfitModal
+                isOpen={modalVerAbierto}
+                onRequestClose={cerrarModalVer}
+                outfit={outfitAVer}
+            />
 
             <div className="mis-outfits-pagination">
                 <button

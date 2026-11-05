@@ -8,8 +8,10 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { BrowserRouter, Route, Routes } from "react-router";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
-import CrearOutfit from "./components/CrearOutfit.jsx";
-import MisOutfits from "./components/MisOutfits.jsx";
+import CrearOutfit from "../src/components/outfits/CrearOutfit.jsx";
+import MisOutfits from "../src/components/outfits/MisOutfits.jsx";
+import RutaProtegida from "./components/auth/RutaProtegida.jsx";
+import { Toaster } from "react-hot-toast";
 
 
 function App() {
@@ -20,12 +22,13 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/registro" element={<Register />}></Route>
           <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/crear-outfit" element={<CrearOutfit />} />
-            <Route path="/misoutfits" element={<MisOutfits />} />
+            <Route path="/dashboard" element={<RutaProtegida><Dashboard /></RutaProtegida>} />
+            <Route path="/crear-outfit" element={<RutaProtegida><CrearOutfit /></RutaProtegida>} />
+            <Route path="/misoutfits" element={<RutaProtegida><MisOutfits /></RutaProtegida>} />
           </Route>
         </Routes>
       </BrowserRouter>
+      <Toaster position='bottom-right'/>
     </Provider>
   );
 }

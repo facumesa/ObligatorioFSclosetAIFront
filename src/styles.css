@@ -1638,4 +1638,385 @@ button.profile:hover {
     transform: scale(1.15);
 }
 
+/* MODAL */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 18px;
+    padding: 30px;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
+/* FIN MODAL */
+
+
+/* SPINNER */
+
+.spinner-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(245, 249, 245, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    z-index: 9999;
+}
+
+.spinner-circle {
+    width: 52px;
+    height: 52px;
+    border: 4px solid #dce9df;
+    border-top-color: #416b4e;
+    border-right-color: #71977b;
+    border-radius: 50%;
+    animation: closet-spin 0.85s linear infinite;
+    box-shadow: 0 4px 20px rgba(65, 107, 78, 0.08);
+}
+
+.spinner-text {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #416b4e;
+    animation: closet-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes closet-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes closet-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.45;
+    }
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    .spinner-circle,
+    .spinner-text {
+        animation: none;
+    }
+}
+
+
+/* MODAL ELIMINAR OUTFIT */
+
+.modal-eliminar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: calc(100% - 32px);
+    max-width: 420px;
+    padding: 36px;
+
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    outline: none;
+    text-align: center;
+}
+
+.eliminar-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+    background: #fff0ee;
+    color: #c84b42;
+
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.modal-eliminar h2 {
+    margin: 0 0 12px;
+    font-size: 23px;
+    color: #253b2c;
+}
+
+.modal-eliminar p {
+    margin: 0;
+    color: #69766c;
+    line-height: 1.6;
+}
+
+.modal-eliminar .eliminar-advertencia {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #b85c52;
+}
+
+.eliminar-acciones {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.eliminar-acciones button {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-cancelar-eliminar {
+    background: #eef2ee;
+    color: #416b4e;
+}
+
+.btn-cancelar-eliminar:hover {
+    background: #e1e9e2;
+}
+
+.btn-confirmar-eliminar {
+    background: #c84b42;
+    color: #ffffff;
+}
+
+.btn-confirmar-eliminar:hover {
+    background: #ad3932;
+}
+
+.eliminar-acciones button:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+    .modal-eliminar {
+        padding: 26px 20px;
+    }
+}
+
+.mis-outfit-card {
+    cursor: pointer;
+}
+
+
+/* DETALLE DEL OUTFIT */
+
+.ver-outfit {
+    width: 100%;
+    max-width: 780px;
+    color: #253b2c;
+}
+
+.ver-outfit-header {
+    margin-bottom: 26px;
+}
+
+.ver-outfit-eyebrow {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #71977b;
+}
+
+.ver-outfit-header h2 {
+    margin: 0 0 10px;
+    font-size: 27px;
+    font-weight: 700;
+    color: #253b2c;
+}
+
+.ver-outfit-descripcion {
+    margin: 0;
+    color: #69766c;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.ver-outfit-etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.ver-outfit-etiquetas span {
+    padding: 7px 13px;
+    border-radius: 20px;
+    background: #edf3ee;
+    color: #416b4e;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.ver-outfit-etiquetas .ver-outfit-favorito {
+    background: #fff0f0;
+    color: #c84b42;
+}
+
+.ver-outfit-separador {
+    height: 1px;
+    background: #e6ede7;
+    margin-bottom: 25px;
+}
+
+.ver-outfit-prendas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.ver-outfit-prendas-header h3 {
+    margin: 0 0 5px;
+    font-size: 17px;
+    color: #253b2c;
+}
+
+.ver-outfit-prendas-header p {
+    margin: 0;
+    font-size: 13px;
+    color: #89958b;
+}
+
+.ver-outfit-contador {
+    font-size: 12px;
+    font-weight: 600;
+    color: #416b4e;
+    white-space: nowrap;
+}
+
+.ver-outfit-prendas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.ver-outfit-prenda {
+    min-width: 0;
+    background: #f8faf8;
+    border: 1px solid #e7ede8;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.ver-outfit-prenda-imagen {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: #edf3ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ver-outfit-prenda-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ver-outfit-prenda-imagen span {
+    font-size: 36px;
+}
+
+.ver-outfit-prenda-info {
+    padding: 12px;
+}
+
+.ver-outfit-prenda-info h4 {
+    margin: 0 0 5px;
+    font-size: 13px;
+    color: #253b2c;
+}
+
+.ver-outfit-prenda-info p {
+    margin: 0;
+    font-size: 12px;
+    color: #89958b;
+}
+
+.ver-outfit-acciones {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #e6ede7;
+}
+
+.btn-volver-outfit {
+    padding: 12px 20px;
+    background: #416b4e;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-volver-outfit:hover {
+    background: #32553c;
+}
+
+@media (max-width: 600px) {
+    .ver-outfit-prendas-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ver-outfit-header h2 {
+        font-size: 23px;
+    }
+
+    .ver-outfit-prendas-header {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 380px) {
+    .ver-outfit-prendas-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
 

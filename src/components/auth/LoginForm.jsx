@@ -36,7 +36,7 @@ const LoginForm = () => {
 
     try {
       const respuesta = await fetch(
-        "https://obligatorio-f-scloset-ai.vercel.app/v1/auth/login",
+        `${import.meta.env.VITE_API_BASE_URL}/v1/auth/login`,
         {
           method: "POST",
           headers: {
