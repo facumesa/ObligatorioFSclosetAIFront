@@ -2018,5 +2018,399 @@ button.profile:hover {
 }
 
 
+/* MI ARMARIO */
+
+.prenda-card {
+    cursor: pointer;
+}
+
+.prenda-card-image {
+    height: 260px;
+    overflow: hidden;
+    background: #f1f5f1;
+}
+
+.prenda-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.prenda-sin-imagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #819386;
+    font-size: 13px;
+}
+
+.mi-armario .mis-outfits-filters input {
+    padding: 12px 15px;
+    border: 1px solid #dce6dd;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+.mi-armario .mis-outfits-filters input:focus {
+    border-color: #416b4e;
+}
+
+
+/* ===== MI ARMARIO - CATÁLOGO ===== */
+
+.mi-armario .mis-outfits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+/* TARJETA */
+
+.armario-card {
+    background: #fff;
+    border: 1px solid #e6ece6;
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+}
+
+.armario-card:hover {
+    transform: translateY(-5px);
+    border-color: #c8d9cb;
+    box-shadow: 0 14px 35px rgba(36, 67, 43, 0.10);
+}
+
+/* IMAGEN */
+
+.armario-card-imagen {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f3f6f1;
+}
+
+.armario-card-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.armario-card:hover .armario-card-imagen img {
+    transform: scale(1.045);
+}
+
+.armario-card-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #8c9a8e;
+    font-size: 13px;
+}
+
+.armario-card-temporada {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    color: #42624a;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* INFORMACIÓN */
+
+.armario-card-contenido {
+    padding: 17px;
+}
+
+.armario-card-tipo {
+    display: block;
+    color: #7b9b83;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.armario-card-contenido h3 {
+    color: #263d2e;
+    font-size: 16px;
+    font-weight: 650;
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+
+.armario-card-detalles {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    color: #849187;
+    font-size: 12px;
+}
+
+.armario-card-punto {
+    color: #b2bdb4;
+}
+
+/* ACCIONES */
+
+.armario-card-acciones {
+    display: flex;
+    gap: 9px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #edf1ed;
+}
+
+.armario-card-acciones button {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 8px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.armario-btn-editar {
+    border: 1px solid #d5e3d8;
+    background: #f0f5f1;
+    color: #416b4e;
+}
+
+.armario-btn-editar:hover {
+    background: #e2eee5;
+}
+
+.armario-btn-eliminar {
+    border: 1px solid #f0d8d5;
+    background: #fff7f6;
+    color: #bd5b52;
+}
+
+.armario-btn-eliminar:hover {
+    background: #ffebe8;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1250px) {
+    .mi-armario .mis-outfits-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 850px) {
+    .mi-armario .mis-outfits-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .mi-armario .mis-outfits-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* CREAR PRENDA */
+
+.crear-prenda-form {
+    max-width: 1000px;
+}
+
+.crear-prenda-form input[type="file"] {
+    width: 100%;
+    padding: 14px;
+    background: #f8faf8;
+    border: 1px dashed #b6cbb9;
+    border-radius: 12px;
+    color: #416b4e;
+    cursor: pointer;
+}
+
+.crear-prenda-form input[type="file"]:hover {
+    background: #f0f6f1;
+    border-color: #71977b;
+}
+
+.crear-prenda-preview {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f3f6f1;
+    border: 1px solid #e1e9e2;
+}
+
+.crear-prenda-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.crear-prenda-sin-imagen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #91a194;
+    font-size: 13px;
+    text-align: center;
+}
+
+
+/* DETALLE DE PRENDA */
+
+.ver-prenda {
+    width: 100%;
+    max-width: 760px;
+}
+
+.ver-prenda h2 {
+    color: #253b2c;
+    font-size: 27px;
+    margin: 8px 0 24px;
+}
+
+.ver-prenda-contenido {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+.ver-prenda-imagen {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f1f5f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #819386;
+}
+
+.ver-prenda-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ver-prenda-info {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.ver-prenda-label {
+    display: block;
+    color: #809387;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.ver-prenda-info p {
+    margin: 0;
+    font-size: 15px;
+    color: #253b2c;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .ver-prenda-contenido {
+        grid-template-columns: 1fr;
+    }
+
+    .ver-prenda-imagen {
+        max-height: 340px;
+    }
+}
+
+
+/* CHECKBOX QUITAR IMAGEN */
+
+.quitar-imagen {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 12px 16px;
+
+    background: #fff8f7;
+    border: 1px solid #efd9d6;
+    border-radius: 10px;
+
+    color: #a64b44;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quitar-imagen:hover {
+    background: #fff0ee;
+    border-color: #dfa9a4;
+}
+
+.quitar-imagen input[type="checkbox"] {
+    appearance: auto;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+
+    accent-color: #c84b42;
+    cursor: pointer;
+}
+
+.quitar-imagen span {
+    line-height: 1.4;
+}
+
+.quitar-imagen:has(input:checked) {
+    background: #ffebe8;
+    border-color: #c84b42;
+}
+
+.quitar-imagen:has(input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.quitar-imagen input:disabled {
+    cursor: not-allowed;
+}
+
+
+
+
+
+
 
 

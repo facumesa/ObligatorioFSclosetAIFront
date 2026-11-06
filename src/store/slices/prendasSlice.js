@@ -1,3 +1,4 @@
+
 import { createSlice } from "@reduxjs/toolkit";
 
 const prendasSlice = createSlice({
@@ -14,6 +15,26 @@ const prendasSlice = createSlice({
             state.cargado = true;
         },
 
+        agregarPrenda: (state, action) => {
+            state.lista.push(action.payload);
+        },
+
+        actualizarPrenda: (state, action) => {
+            const indice = state.lista.findIndex(
+                (prenda) => prenda._id === action.payload._id
+            );
+
+            if (indice !== -1) {
+                state.lista[indice] = action.payload;
+            }
+        },
+
+        eliminarPrenda: (state, action) => {
+            state.lista = state.lista.filter(
+                (prenda) => prenda._id !== action.payload
+            );
+        },
+
         limpiarPrendas: (state) => {
             state.lista = [];
             state.cargado = false;
@@ -21,6 +42,12 @@ const prendasSlice = createSlice({
     }
 });
 
-export const { guardarPrendas, limpiarPrendas } = prendasSlice.actions;
+export const {
+    guardarPrendas,
+    agregarPrenda,
+    actualizarPrenda,
+    eliminarPrenda,
+    limpiarPrendas
+} = prendasSlice.actions;
 
 export default prendasSlice.reducer;

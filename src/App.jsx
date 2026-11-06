@@ -12,7 +12,8 @@ import CrearOutfit from "../src/components/outfits/CrearOutfit.jsx";
 import MisOutfits from "../src/components/outfits/MisOutfits.jsx";
 import RutaProtegida from "./components/auth/RutaProtegida.jsx";
 import { Toaster } from "react-hot-toast";
-
+import MiArmario from "./components/prendas/MiArmario.jsx";
+import CrearPrenda from "./components/prendas/CrearPrenda.jsx";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
             <Route path="/dashboard" element={<RutaProtegida><Dashboard /></RutaProtegida>} />
             <Route path="/crear-outfit" element={<RutaProtegida><CrearOutfit /></RutaProtegida>} />
             <Route path="/misoutfits" element={<RutaProtegida><MisOutfits /></RutaProtegida>} />
+            <Route path="/mi-armario" element={<RutaProtegida><MiArmario /></RutaProtegida>} />
+            <Route path="/crear-prenda" element={<RutaProtegida><CrearPrenda /></RutaProtegida>} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -20,7 +20,7 @@ const Sidebar = () => {
             <span className="symbol">◈</span> Mis outfits
           </NavLink>
 
-          <NavLink to="">
+          <NavLink to="/mi-armario">
             <span className="symbol">▦</span> Mi armario
           </NavLink>
 

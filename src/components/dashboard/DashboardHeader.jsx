@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import { cerrarSesion } from "../../store/slices/authSlice";
 import { limpiarCategorias } from "../../store/slices/categoriasSlice";
 import { limpiarPrendas } from "../../store/slices/prendasSlice";
+import { limpiarOutfits } from "../../store/slices/outfitsSlice";
+
 
 
 const DashboardHeader = () => {
@@ -21,6 +23,7 @@ const DashboardHeader = () => {
         dispatch(cerrarSesion());
         dispatch(limpiarPrendas());
         dispatch(limpiarCategorias());
+        dispatch(limpiarOutfits());
         navigate("/login", { replace: true });
     };
 

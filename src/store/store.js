@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import prendasReducer from './slices/prendasSlice'
 import categoriasReducer from "./slices/categoriasSlice";
 import spinnerReducer from './slices/spinnerSlice';
+import outfitsReducer from "./slices/outfitsSlice";
 
 
 
@@ -11,6 +12,7 @@ export const store = configureStore({
         auth : authReducer,
         prendas: prendasReducer,
         categorias: categoriasReducer,
-        spinner: spinnerReducer
+        spinner: spinnerReducer,
+        outfits: outfitsReducer
     }
 })
