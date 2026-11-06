@@ -33,8 +33,6 @@ const DashboardContent = () => {
     if (!autenticado || !token) return;
     if (cargado && outfitsCargados) return;
 
-    let cancelado = false;
-
     const cargarEstadisticas = async () => {
       try {
         const headers = {
@@ -79,8 +77,6 @@ const DashboardContent = () => {
 
         const resultados = await Promise.all(peticiones);
 
-        if (cancelado) return;
-
         resultados.forEach(({ tipo, datos }) => {
           if (tipo === "prendas") {
             dispatch(guardarPrendas(datos));
@@ -91,17 +87,12 @@ const DashboardContent = () => {
 
         setError("");
       } catch (error) {
-        if (!cancelado) {
-          setError(error.message);
-        }
+        setError(error.message);
       }
     };
 
     cargarEstadisticas();
 
-    return () => {
-      cancelado = true;
-    };
   }, [cargado, outfitsCargados, dispatch, token, autenticado]);
 
   return (

@@ -849,6 +849,26 @@ button.profile:hover {
     background: #faf3ee;
 }
 
+.profile-administration {
+    width: 100%;
+    margin-top: 5px;
+    padding: 11px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #256949;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.profile-administration:hover {
+    background: #2569493d;
+}
+
 .field-error {
     margin: 6px 0 0;
     color: #a36c59;
@@ -2406,6 +2426,92 @@ button.profile:hover {
 .quitar-imagen input:disabled {
     cursor: not-allowed;
 }
+
+
+/* PANEL ADMINISTRATIVO - CATEGORÍAS */
+
+.admin-categorias-lista {
+    margin-top: 35px;
+}
+
+.admin-categorias-lista h2 {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.admin-categoria-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 20px 24px;
+    margin-bottom: 14px;
+
+    background: #ffffff;
+    border: 1px solid #e5eae6;
+    border-radius: 14px;
+
+    transition: border-color 0.2s ease;
+}
+
+.admin-categoria-card:hover {
+    border-color: #aac5b2;
+}
+
+.admin-categoria-card h3 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #253d2d;
+}
+
+.admin-categoria-card p {
+    margin: 0;
+    font-size: 13px;
+    color: #79857c;
+}
+
+.admin-categoria-acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.admin-categoria-acciones button {
+    padding: 9px 16px;
+    border: 1px solid #dbe5dd;
+    background: #ffffff;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #476551;
+    cursor: pointer;
+}
+
+.admin-categoria-acciones button:last-child {
+    color: #b34d46;
+    border-color: #f0dedb;
+}
+
+.admin-categoria-acciones button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .admin-categoria-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-categoria-acciones {
+        justify-content: flex-end;
+    }
+}
+
 
 
 

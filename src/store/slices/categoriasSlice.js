@@ -1,3 +1,4 @@
+
 import { createSlice } from "@reduxjs/toolkit";
 
 const categoriasSlice = createSlice({
@@ -14,6 +15,30 @@ const categoriasSlice = createSlice({
             state.cargado = true;
         },
 
+        agregarCategoria: (state, action) => {
+            state.lista.push(action.payload);
+        },
+
+        actualizarCategoria: (state, action) => {
+            const indice = state.lista.findIndex(
+                (categoria) => categoria._id === action.payload._id
+            );
+
+            if (indice !== -1) {
+                state.lista[indice] = action.payload;
+            }
+        },
+
+        eliminarCategoria: (state, action) => {
+            state.lista = state.lista.filter(
+                (categoria) => categoria._id !== action.payload
+            );
+        },
+
+        invalidarCategorias: (state) => {
+            state.cargado = false;
+        },
+
         limpiarCategorias: (state) => {
             state.lista = [];
             state.cargado = false;
@@ -23,6 +48,10 @@ const categoriasSlice = createSlice({
 
 export const {
     guardarCategorias,
+    agregarCategoria,
+    actualizarCategoria,
+    eliminarCategoria,
+    invalidarCategorias,
     limpiarCategorias
 } = categoriasSlice.actions;
 

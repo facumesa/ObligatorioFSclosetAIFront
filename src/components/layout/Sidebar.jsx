@@ -1,6 +1,10 @@
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router";
 
 const Sidebar = () => {
+  const usuario = useSelector((state) => state.auth.usuario);
+  const esPlus = usuario?.plan?.toLowerCase() === "plus";
+
   return (
     <aside className="sidebar">
       <NavLink className="brand" to="/dashboard">
@@ -34,13 +38,13 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      <div className="sidebar-bottom">
-        <h3>✦ Tu estilo, sin límites</h3>
-        <p>Descubrí más combinaciones y organizá todos tus outfits.</p>
-        <button className="pill-button">
-          Explorar Premium
-        </button>
-      </div>
+      {esPlus && (
+        <div className="sidebar-bottom">
+          <h3>✦ Tu estilo, sin límites</h3>
+          <p>Descubrí más combinaciones y organizá todos tus outfits.</p>
+          <button className="pill-button">Explorar Premium</button>
+        </div>
+      )}
     </aside>
   );
 };
