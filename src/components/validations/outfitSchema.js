@@ -5,7 +5,8 @@ export const crearOutfitSchema = yup.object({
     nombre: yup
         .string()
         .trim()
-        .required("El nombre del outfit es obligatorio"),
+        .required("El nombre del outfit es obligatorio")
+        .max(20, "El nombre no puede superar los 20 caracteres"),
 
     descripcion: yup
         .string()
