@@ -18,15 +18,20 @@ const authSlice = createSlice({
             state.token = action.payload.token;
             state.autenticado = true;
         },
-        
+
         cerrarSesion: (state) => {
             state.usuario = null;
             state.token = null;
             state.autenticado = false;
+        },
+        actualizarPlan: (state, action) => {
+            if (state.usuario) {
+                state.usuario.plan = action.payload;
+            }
         }
     }
 });
 
-export const { iniciarSesion, cerrarSesion } = authSlice.actions;
+export const { iniciarSesion, cerrarSesion, actualizarPlan } = authSlice.actions;
 
 export default authSlice.reducer;

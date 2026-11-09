@@ -24,7 +24,7 @@ const DashboardContent = () => {
 
   const cargando = !cargado || !outfitsCargados;
 
-  const usuario = JSON.parse(localStorage.getItem("usuario") || "null");
+  const usuario = useSelector((state) => state.auth.usuario);
 
   const token = useSelector((state) => state.auth.token);
   const autenticado = useSelector((state) => state.auth.autenticado);

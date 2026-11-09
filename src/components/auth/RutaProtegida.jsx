@@ -7,6 +7,8 @@ import { cerrarSesion } from "../../store/slices/authSlice";
 import { limpiarPrendas } from "../../store/slices/prendasSlice";
 import { limpiarCategorias } from "../../store/slices/categoriasSlice";
 import { limpiarOutfits } from "../../store/slices/outfitsSlice";
+import { limpiarRecomendaciones } from "../../store/slices/recomendacionesSlice";
+
 
 const RutaProtegida = ({ children, soloAdmin = false }) => {
     const dispatch = useDispatch();
@@ -24,9 +26,11 @@ const RutaProtegida = ({ children, soloAdmin = false }) => {
             dispatch(limpiarPrendas());
             dispatch(limpiarCategorias());
             dispatch(limpiarOutfits());
+            dispatch(limpiarRecomendaciones())
 
             localStorage.removeItem("token");
             localStorage.removeItem("usuario");
+            localStorage.removeItem("ubicacionClima");
 
             navigate("/login", { replace: true });
         } else if (soloAdmin && !esAdmin) {

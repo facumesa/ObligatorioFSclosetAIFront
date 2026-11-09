@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import MiArmario from "./components/prendas/MiArmario.jsx";
 import CrearPrenda from "./components/prendas/CrearPrenda.jsx";
 import AdminCategorias from "./components/admin/AdminCategorias.jsx";
+import RecomendacionesIA from "./components/recomendaciones/RecomendacionesIA";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/mi-armario" element={<RutaProtegida><MiArmario /></RutaProtegida>} />
             <Route path="/crear-prenda" element={<RutaProtegida><CrearPrenda /></RutaProtegida>} />
             <Route path="/admin/categorias" element={<RutaProtegida soloAdmin><AdminCategorias /></RutaProtegida>}/>
+            <Route path="/recomendaciones" element={<RutaProtegida><RecomendacionesIA /></RutaProtegida>}/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import crearOutfitSchema from "../validations/outfitSchema";
 import { useDispatch, useSelector } from "react-redux";
 import { guardarPrendas } from "../../store/slices/prendasSlice";
@@ -11,6 +11,10 @@ import toast from "react-hot-toast";
 
 const CrearOutfit = () => {
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const recomendacionIA = location.state?.recomendacion;
 
   const [error, setError] = useState("");
 
@@ -30,6 +34,7 @@ const CrearOutfit = () => {
     control,
     handleSubmit,
     watch,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(crearOutfitSchema),
@@ -44,9 +49,25 @@ const CrearOutfit = () => {
     },
   });
 
+
+  useEffect(() => {
+    if (!recomendacionIA) return;
+
+    reset({
+      nombre: recomendacionIA.nombre || "",
+      descripcion: recomendacionIA.descripcion || "",
+      categoriaId: "",
+      temporada: recomendacionIA.temporada || "",
+      prendas: recomendacionIA.prendas || [],
+      favorito: false
+    });
+
+  }, [recomendacionIA, reset]);
+
+
   useEffect(() => {
     if (prendasCargadas) return;
-
+    
     const cargarPrendas = async () => {
       try {
         const respuesta = await fetch(
@@ -67,8 +88,6 @@ const CrearOutfit = () => {
         dispatch(guardarPrendas(datos));
       } catch (error) {
         setError(error.message);
-      } finally {
-        setCargandoPrendas(false);
       }
     };
 

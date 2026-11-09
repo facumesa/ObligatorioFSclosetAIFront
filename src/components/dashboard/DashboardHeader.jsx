@@ -5,6 +5,8 @@ import { cerrarSesion } from "../../store/slices/authSlice";
 import { limpiarCategorias } from "../../store/slices/categoriasSlice";
 import { limpiarPrendas } from "../../store/slices/prendasSlice";
 import { limpiarOutfits } from "../../store/slices/outfitsSlice";
+import { limpiarRecomendaciones } from "../../store/slices/recomendacionesSlice";
+
 
 const DashboardHeader = () => {
   const usuario = useSelector((state) => state.auth.usuario);
@@ -17,11 +19,13 @@ const DashboardHeader = () => {
   const salir = () => {
     localStorage.removeItem("usuario");
     localStorage.removeItem("token");
+    localStorage.removeItem("ubicacionClima");
 
     dispatch(cerrarSesion());
     dispatch(limpiarPrendas());
     dispatch(limpiarCategorias());
     dispatch(limpiarOutfits());
+    dispatch(limpiarRecomendaciones());
     navigate("/login", { replace: true });
   };
 
