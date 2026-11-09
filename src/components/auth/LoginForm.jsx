@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
-import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import LanguageSelector from "../translationComponents/LanguageSelector";
 import { iniciarSesion } from "../../store/slices/authSlice";
 import loginSchema from "../validations/loginSchema";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -12,7 +10,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
 
   const [error, setError] = useState(false);
 
@@ -23,7 +20,7 @@ const LoginForm = () => {
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
-    resolver: yupResolver(loginSchema(t)),
+    resolver: yupResolver(loginSchema),
     mode: "onChange",
     defaultValues: {
       username: "",
@@ -71,17 +68,16 @@ const LoginForm = () => {
 
   return (
     <div className="auth-form">
-      <LanguageSelector />
 
-      <div className="eyebrow">{t("auth.login.eyebrow")}</div>
+      <div className="eyebrow">BIENVENIDO DE NUEVO</div>
 
-      <h1>{t("auth.login.title")}</h1>
+      <h1>Iniciá sesión</h1>
 
-      <p className="subtitle">{t("auth.login.subtitle")}</p>
+      <p className="subtitle">Entrá a tu armario digital y seguí creando tu estilo.</p>
 
       <form onSubmit={handleSubmit(ingresar)} noValidate>
         <div className="field">
-          <label htmlFor="username">{t("auth.login.username")}</label>
+          <label htmlFor="username">Nombre de usuario</label>
 
           <Controller
             name="username"
@@ -90,7 +86,7 @@ const LoginForm = () => {
               <input
                 {...field}
                 id="username"
-                placeholder={t("auth.login.usernamePlaceholder")}
+                placeholder="Tu usuario"
                 autoComplete="username"
               />
             )}
@@ -102,7 +98,7 @@ const LoginForm = () => {
         </div>
 
         <div className="field">
-          <label htmlFor="password">{t("auth.login.password")}</label>
+          <label htmlFor="password">Contraseña</label>
           <div className="passwordWrapper">
           <Controller
             name="password"
@@ -112,7 +108,7 @@ const LoginForm = () => {
                 {...field}
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder={t("auth.login.passwordPlaceholder")}
+                placeholder="Ingresá tu contraseña"
                 autoComplete="current-password"
               />
             )}
@@ -136,7 +132,7 @@ const LoginForm = () => {
           type="submit"
           disabled={!isValid || isSubmitting}
         >
-          {isSubmitting ? t("common.loading") : `${t("auth.login.submit")} →`}
+          {isSubmitting ? "Cargando..." : "Ingresar →"}
         </button>
 
         {error && (
@@ -144,16 +140,16 @@ const LoginForm = () => {
             <span className="auth-error-icon">!</span>
 
             <div className="auth-error-content">
-              <strong>{t("auth.login.errorTitle")}</strong>
-              <p>{t("auth.login.errorMessage")}</p>
+              <strong>No pudimos iniciar sesión</strong>
+              <p>Verificá tu usuario y contraseña e intentá nuevamente.</p>
             </div>
           </div>
         )}
       </form>
 
       <p className="auth-switch">
-        {t("auth.login.noAccount")}{" "}
-        <Link to="/registro">{t("auth.login.registerLink")}</Link>
+        ¿Todavía no tenés cuenta?{" "}
+        <Link to="/registro">Registrate</Link>
       </p>
     </div>
   );

@@ -145,7 +145,6 @@ const CrearOutfit = () => {
       );
 
       const datos = await respuesta.json();
-      console.log(datos);
 
       if (!respuesta.ok) {
         setError(datos.message || "No se pudo crear el outfit");

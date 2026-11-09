@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import EditarOutfitModal from "./modals/EditarOutfitModal";
 import EliminarOutfitModal from "./modals/EliminarOutfitModal";
 import VerOutfitModal from "./modals/VerOutfitModal";
+import OutfitCard from "./OutfitCard";
+import FiltrosOutfits from "./FiltrosOutfits";
 import { guardarCategorias } from "../../store/slices/categoriasSlice";
 import { guardarPrendas } from "../../store/slices/prendasSlice";
 import {
@@ -155,8 +157,6 @@ const MisOutfits = () => {
         },
       );
 
-      console.log(respuesta);
-
       if (!respuesta.ok) {
         throw new Error("No se pudo eliminar el outfit");
       }
@@ -254,25 +254,8 @@ const MisOutfits = () => {
       }
 
       cerrarModal();
+      await cargarOutfits();
 
-      const respuestaLista = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/v1/outfits?page=${pagina}&limit=6&temporada=${temporada}&favorito=${favorito}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        },
-      );
-
-      if (!respuestaLista.ok) {
-        throw new Error(
-          "El outfit se guardó, pero no se pudo actualizar la lista",
-        );
-      }
-
-      const datos = await respuestaLista.json();
-
-      dispatch(guardarOutfits(datos));
       toast.success("Outfit editado correctamente");
     } catch (error) {
       setError(error.message);
@@ -349,37 +332,13 @@ const MisOutfits = () => {
         </button>
       </div>
 
-      <div className="mis-outfits-toolbar">
-        <div className="mis-outfits-filters">
-          <select
-            defaultValue=""
-            value={temporada}
-            onChange={(e) => {
-              setTemporada(e.target.value);
-              setPagina(1);
-            }}
-          >
-            <option value="">Todas las temporadas</option>
-            <option value="Verano">Verano</option>
-            <option value="Otoño">Otoño</option>
-            <option value="Invierno">Invierno</option>
-            <option value="Primavera">Primavera</option>
-            <option value="Cualquiera">Cualquiera</option>
-          </select>
-
-          <select
-            defaultValue=""
-            value={favorito}
-            onChange={(e) => {
-              setFavorito(e.target.value);
-              setPagina(1);
-            }}
-          >
-            <option value="">Todos los outfits</option>
-            <option value="true">Favoritos</option>
-          </select>
-        </div>
-      </div>
+      <FiltrosOutfits
+        temporada={temporada}
+        setTemporada={setTemporada}
+        favorito={favorito}
+        setFavorito={setFavorito}
+        setPagina={setPagina}
+      />
 
       <div className="mis-outfits-results">
         <h2>Tu colección</h2>
@@ -392,81 +351,20 @@ const MisOutfits = () => {
           <p>Comenzá creando tu primera combinación.</p>
         </div>
       ) : (
+
         <div className="mis-outfits-grid">
           {outfits.map((outfit) => (
-            <article
-              className="mis-outfit-card"
+            <OutfitCard
               key={outfit._id}
-              onClick={() => abrirModalVer(outfit)}
-            >
-              <div className="mis-outfit-image">
-                <span className="mis-outfit-category">
-                  {outfit.categoriaId?.nombre}
-                </span>
-
-                <button
-                  type="button"
-                  className="mis-outfit-favorite"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    cambiarFavorito(outfit._id, outfit.favorito);
-                  }}
-                >
-                  {outfit.favorito ? "♥" : "♡"}
-                </button>
-
-                <div className="mis-outfit-images">
-                  {outfit.prendas
-                    .slice(0, 3)
-                    .map((prenda) =>
-                      prenda.imagen ? (
-                        <img
-                          key={prenda._id}
-                          src={prenda.imagen}
-                          alt={prenda.nombre}
-                        />
-                      ) : (
-                        <span key={prenda._id}>👕</span>
-                      ),
-                    )}
-                </div>
-              </div>
-
-              <div className="mis-outfit-info">
-                <h3>{outfit.nombre}</h3>
-                <p>{outfit.descripcion}</p>
-
-                <p>
-                  {outfit.prendas.length} prendas · {outfit.temporada}
-                </p>
-
-                <div className="mis-outfit-actions">
-                  <button
-                    type="button"
-                    className="btn-editar-outfit"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      abrirModal(outfit);
-                    }}
-                  >
-                    Editar
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn-eliminar-outfit"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      abrirModalEliminar(outfit);
-                    }}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </div>
-            </article>
+              outfit={outfit}
+              onVer={abrirModalVer}
+              onEditar={abrirModal}
+              onEliminar={abrirModalEliminar}
+              onCambiarFavorito={cambiarFavorito}
+            />
           ))}
         </div>
+
       )}
       <EditarOutfitModal
         isOpen={modalAbierto}

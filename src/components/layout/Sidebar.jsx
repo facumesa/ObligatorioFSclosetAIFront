@@ -1,3 +1,4 @@
+
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router";
 import { useState } from "react";
@@ -12,7 +13,9 @@ const Sidebar = () => {
   const dispatch = useDispatch();
 
   const [cambiandoPlan, setCambiandoPlan] = useState(false);
+  const [menuAbierto, setMenuAbierto] = useState(false);
 
+  const cerrarMenu = () => setMenuAbierto(false);
 
   const cambiarAPremium = async () => {
     if (cambiandoPlan || !esPlus || !token) return;
@@ -59,51 +62,99 @@ const Sidebar = () => {
     }
   };
 
-
   return (
-    <aside className="sidebar">
-      <NavLink className="brand" to="/dashboard">
-        <span className="brand-mark">✦</span>
-        closet<span>ai</span>
-      </NavLink>
+    <>
+      {/* BOTÓN PARA ABRIR EL MENÚ EN CELULARES */}
+      {!menuAbierto && (
+        <button
+          type="button"
+          className="sidebar-mobile-toggle"
+          onClick={() => setMenuAbierto(true)}
+          aria-label="Abrir menú"
+          aria-expanded={false}
+          aria-controls="sidebar-principal"
+        >
+          ☰
+        </button>
+      )}
 
-      <div>
-        <div className="nav-label">MI ESPACIO</div>
+      {/* FONDO OSCURO AL ABRIR EL MENÚ */}
+      {menuAbierto && (
+        <button
+          type="button"
+          className="sidebar-overlay"
+          onClick={cerrarMenu}
+          aria-label="Cerrar menú"
+        />
+      )}
 
-        <nav className="nav">
-          <NavLink to="/dashboard">
-            <span className="symbol">⌂</span> Inicio
+      <aside
+        id="sidebar-principal"
+        className={`sidebar ${menuAbierto ? "sidebar-abierto" : ""}`}
+      >
+        <div className="sidebar-header">
+          <NavLink
+            className="brand"
+            to="/dashboard"
+            onClick={cerrarMenu}
+          >
+            <span className="brand-mark">✦</span>
+            closet<span>ai</span>
           </NavLink>
 
-          <NavLink to="/misoutfits">
-            <span className="symbol">◈</span> Mis outfits
-          </NavLink>
-
-          <NavLink to="/mi-armario">
-            <span className="symbol">▦</span> Mi armario
-          </NavLink>
-
-          <NavLink to="/recomendaciones">
-            <span className="symbol">✧</span> Recomendaciones IA
-          </NavLink>
-        </nav>
-      </div>
-
-      {esPlus && (
-        <div className="sidebar-bottom">
-          <h3>✦ Tu estilo, sin límites</h3>
-          <p>Descubrí más combinaciones y organizá todos tus outfits.</p>
           <button
             type="button"
-            className="pill-button"
-            onClick={cambiarAPremium}
-            disabled={cambiandoPlan}
+            className="sidebar-close"
+            onClick={cerrarMenu}
+            aria-label="Cerrar menú"
           >
-            {cambiandoPlan ? "Cambiando..." : "Cambiate a Premium"}
+            ×
           </button>
         </div>
-      )}
-    </aside>
+
+        <div>
+          <div className="nav-label">MI ESPACIO</div>
+
+          <nav className="nav">
+            <NavLink to="/dashboard" onClick={cerrarMenu}>
+              <span className="symbol">⌂</span> Inicio
+            </NavLink>
+
+            <NavLink to="/misoutfits" onClick={cerrarMenu}>
+              <span className="symbol">◈</span> Mis outfits
+            </NavLink>
+
+            <NavLink to="/mi-armario" onClick={cerrarMenu}>
+              <span className="symbol">▦</span> Mi armario
+            </NavLink>
+
+            <NavLink to="/recomendaciones" onClick={cerrarMenu}>
+              <span className="symbol">✧</span> Recomendaciones IA
+            </NavLink>
+          </nav>
+        </div>
+
+        {esPlus && (
+          <div className="sidebar-bottom">
+            <h3>✦ Tu estilo, sin límites</h3>
+            <p>
+              Descubrí más combinaciones y organizá todos tus outfits.
+            </p>
+
+            <button
+              type="button"
+              className="pill-button"
+              onClick={cambiarAPremium}
+              disabled={cambiandoPlan}
+            >
+              {cambiandoPlan
+                ? "Cambiando..."
+                : "Cambiate a Premium"}
+            </button>
+          </div>
+        )}
+      </aside>
+    </>
   );
 };
 

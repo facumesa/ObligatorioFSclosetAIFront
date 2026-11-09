@@ -100,7 +100,6 @@ const CrearPrenda = () => {
       );
 
       const datos = await respuesta.json();
-      console.log(datos);
 
       if (!respuesta.ok) {
         throw new Error(

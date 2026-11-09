@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import LanguageSelector from "../translationComponents/LanguageSelector";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import registroSchema from "../validations/registerSchema";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   const [error, setError] = useState("");
 
@@ -21,7 +18,7 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
-    resolver: yupResolver(registroSchema(t)),
+    resolver: yupResolver(registroSchema),
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -52,7 +49,7 @@ const RegisterForm = () => {
       const datos = await respuesta.json();
 
       if (!respuesta.ok) {
-        let mensaje = t("auth.register.errorMessage");
+        let mensaje = "Ocurrió un error al registrarte. Intentá nuevamente.";
 
         if (typeof datos.message === "string" && datos.message) {
           mensaje = datos.message;
@@ -68,24 +65,23 @@ const RegisterForm = () => {
 
       navigate("/login");
     } catch (error) {
-      setError(t("auth.register.errorMessage"));
+      setError("Ocurrió un error al registrarte. Intentá nuevamente.");
     }
   };
 
   return (
     <div className="auth-form">
-      <LanguageSelector />
 
-      <div className="eyebrow">{t("auth.register.eyebrow")}</div>
+      <div className="eyebrow">EMPEZÁ A CREAR TU ESTILO</div>
 
-      <h1>{t("auth.register.title")}</h1>
+      <h1>Creá tu cuenta</h1>
 
-      <p className="subtitle">{t("auth.register.subtitle")}</p>
+      <p className="subtitle">Registrate y empezá a organizar tu armario digital.</p>
 
       <form onSubmit={handleSubmit(registrar)} noValidate>
         <div className="row-fields">
           <div className="field">
-            <label htmlFor="name">{t("auth.register.name")}</label>
+            <label htmlFor="name">Nombre</label>
 
             <Controller
               name="name"
@@ -94,7 +90,7 @@ const RegisterForm = () => {
                 <input
                   {...field}
                   id="name"
-                  placeholder={t("auth.register.namePlaceholder")}
+                  placeholder="Tu nombre"
                   autoComplete="name"
                 />
               )}
@@ -106,7 +102,7 @@ const RegisterForm = () => {
           </div>
 
           <div className="field">
-            <label htmlFor="username">{t("auth.register.username")}</label>
+            <label htmlFor="username">Nombre de usuario</label>
 
             <Controller
               name="username"
@@ -115,7 +111,7 @@ const RegisterForm = () => {
                 <input
                   {...field}
                   id="username"
-                  placeholder={t("auth.register.usernamePlaceholder")}
+                  placeholder="Elegí un usuario"
                   autoComplete="username"
                 />
               )}
@@ -128,7 +124,7 @@ const RegisterForm = () => {
         </div>
 
         <div className="field">
-          <label htmlFor="email">{t("auth.register.email")}</label>
+          <label htmlFor="email">Correo electrónico</label>
 
           <Controller
             name="email"
@@ -138,7 +134,7 @@ const RegisterForm = () => {
                 {...field}
                 id="email"
                 type="email"
-                placeholder={t("auth.register.emailPlaceholder")}
+                placeholder="tu@email.com"
                 autoComplete="email"
               />
             )}
@@ -150,7 +146,7 @@ const RegisterForm = () => {
         </div>
 
         <div className="field">
-          <label htmlFor="password">{t("auth.register.password")}</label>
+          <label htmlFor="password">Contraseña</label>
           <div className="passwordWrapper">
 
             <Controller
@@ -161,7 +157,7 @@ const RegisterForm = () => {
                   {...field}
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder={t("auth.register.passwordPlaceholder")}
+                  placeholder="Creá una contraseña"
                   autoComplete="new-password"
                 />
               )}
@@ -182,7 +178,7 @@ const RegisterForm = () => {
 
         <div className="field">
           <label htmlFor="confirmPassword">
-            {t("auth.register.confirmPassword")}
+            Confirmar contraseña
           </label>
 
           <div className="passwordWrapper">
@@ -195,7 +191,7 @@ const RegisterForm = () => {
                   {...field}
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
-                  placeholder={t("auth.register.confirmPasswordPlaceholder")}
+                  placeholder="Repetí tu contraseña"
                   autoComplete="new-password"
                 />
               )}
@@ -221,8 +217,8 @@ const RegisterForm = () => {
           disabled={!isValid || isSubmitting}
         >
           {isSubmitting
-            ? t("common.loading")
-            : `${t("auth.register.submit")} →`}
+            ? "Cargando..."
+            : "Crear cuenta →"}
         </button>
 
         {error && (
@@ -230,7 +226,7 @@ const RegisterForm = () => {
             <span className="auth-error-icon">!</span>
 
             <div className="auth-error-content">
-              <strong>{t("auth.register.errorTitle")}</strong>
+              <strong>No pudimos crear tu cuenta</strong>
               <p>{error}</p>
             </div>
           </div>
@@ -238,8 +234,8 @@ const RegisterForm = () => {
       </form>
 
       <p className="auth-switch">
-        {t("auth.register.hasAccount")}{" "}
-        <Link to="/login">{t("auth.register.loginLink")}</Link>
+        ¿Ya tenés cuenta?{" "}
+        <Link to="/login">Iniciá sesión</Link>
       </p>
     </div>
   );

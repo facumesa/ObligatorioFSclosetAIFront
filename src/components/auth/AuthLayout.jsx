@@ -1,8 +1,6 @@
 
-import { useTranslation } from "react-i18next";
 
 const AuthLayout = ({ children }) => {
-  const { t } = useTranslation();
 
   return (
     <div className="auth-page">
@@ -16,14 +14,14 @@ const AuthLayout = ({ children }) => {
 
         <div>
           <h2>
-            {t("auth.layout.title1")}
+            Tu armario.
             <br />
-            {t("auth.layout.title2")}
+            Tu estilo.
             <br />
-            {t("auth.layout.title3")}
+            Tus reglas.
           </h2>
 
-          <p>{t("auth.layout.description")}</p>
+          <p>Descubrí una forma más inteligente de organizar tu ropa y crear looks que te representen.</p>
         </div>
       </section>
 
